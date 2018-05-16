@@ -1,25 +1,21 @@
 import urllib3
-import re
 from bs4 import BeautifulSoup
+import re
 
 # finds news articles that are about Adani from the Guardian's website
 searchURL = "https://news.google.com/news/rss/search/section/q/adani+guardian/adani+guardian?hl=en-AU&gl=AU&ned=au"
 http = urllib3.PoolManager()
 searchResults = http.request('GET', searchURL)
 searchResults = searchResults.data.decode("utf-8") # transform to regular string
-searchResultsList = re.split('\http+', searchResults) # split XML file into list with each element starting with a URL address
-searchResultsListTrim = []
-searchResultsListTrim = searchResultsList[3:] # remove irrelevant data at start of list
+soup = BeautifulSoup(searchResults, "xml")
+links = soup.find_all('link')
 urls = []
-for searchResult in searchResultsListTrim:
-    searchResultSplit= re.split('\/', searchResult) # get domain name
-    searchResultURL = re.split('\"', searchResult) # get full URL
-    matchNews = re.search('news', searchResultSplit[2])
-    matchEncrypted = re.search('encrypted', searchResultURL[0])
-    matchDouble = re.search('\<\/link>', searchResultURL[0])
-    if not matchNews and not matchEncrypted and not matchDouble:
-        searchResultURL = "http" + searchResultURL[0]
-        urls.append(searchResultURL)
+for link in links:
+    url = link.get_text()
+    # only retrieve articles from Guardian website
+    validUrl = re.search('www.theguardian.com', url)
+    if validUrl:
+        urls.append(url)
 
 # gets all quotes from all news articles found
 http = urllib3.PoolManager()
