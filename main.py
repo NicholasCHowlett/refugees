@@ -2,8 +2,7 @@ import urllib3
 from bs4 import BeautifulSoup
 import re
 
-"""Find articles that are about refugees detained on Nauru from the Guardian's website.
-"""
+"""Find articles that are about refugees detained on Nauru from the Guardian's website."""
 
 """Retrieve articles that are 'directly about' refugees on Nauru. 'Directly about' is defined as a search query."""
 searchURL = "https://news.google.com/news/rss/search/section/q/nauru+refugee+guardian/nauru+refugee+guardian?hl=en-AU&gl=AU&ned=au" # definition of 'directly about'
@@ -21,8 +20,7 @@ for link in links:
     if validUrl:
         urls.append(url)
 
-"""Find all 'directly relevant' sentences from within all news articles found.
-"""
+"""Find all 'directly relevant' sentences from within all news articles found."""
 
 http = urllib3.PoolManager()
 validSentencesAll = []
@@ -55,12 +53,15 @@ for url in urls:
 validSentencesAll.remove([])
 
 """Combine directly relevant sentences randomly into a single paragraph."""
+
 # TODO: combine into single 1-dimensional list then random.shuffle(list) twice
 
 """Add article hyperlinks to respective sentences within paragraph."""
+
 # TODO: design algorithm
 
 """Display paragraph on a single page website."""
+
 #def application(environ, start_response):
     # status = '200 OK'
     # output = b'output.'
